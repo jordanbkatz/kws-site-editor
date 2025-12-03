@@ -1,0 +1,533 @@
+{
+  "company": {
+    "name": "Northland Lobster Co",
+    "anIndividual": false
+  },
+  "logo": {
+    "type": [
+      "image",
+      "text"
+    ],
+    "text": [
+      "Northland",
+      " Lobster Co"
+    ]
+  },
+  "contactInfo": {
+    "phoneNumber": "(603) 447-6756",
+    "email": "northlandlobster@gmail.com",
+    "mailServer": "https://kws-mail-server-bf4f93f57150.herokuapp.com"
+  },
+  "location": {
+    "placeId": "ChIJeavthXsJs0wR2fikcUfnO4w",
+    "state": "New Hampshire",
+    "country": "United States",
+    "address": "197 W Main St, Conway, NH 03818",
+    "cords": {
+      "lat": 43.9745622,
+      "lng": -71.1330368
+    },
+    "timeZone": "America/New_York",
+    "displayLocation": true,
+    "renderMap": false,
+    "gMapsApiKey": "AIzaSyAPTHI3mxZmoXfwYUtVqBgWm_uuhaZpLHU"
+  },
+  "styles": {
+    "a1": "royalblue",
+    "a2": "crimson",
+    "b1": "#f6f2ed",
+    "b2": "#fbf9f7"
+  },
+  "socials": [
+    {
+      "name": "facebook",
+      "url": "https://www.facebook.com/p/Northland-Lobster-Company-100057598413800/"
+    },
+    {
+      "name": "instagram",
+      "url": "https://www.instagram.com/explore/locations/288298666/northland-lobster-company/"
+    },
+    {
+      "name": "yelp",
+      "url": "https://www.yelp.com/biz/northland-lobster-conway"
+    }
+  ],
+  "animations": {
+    "on": true,
+    "once": true
+  },
+  "analytics": {
+    "on": false,
+    "id": "G-WNV33F5N9X"
+  },
+  "topbar": {
+    "show": true,
+    "left": "address",
+    "right": "phone"
+  },
+  "hero": {
+    "headline": [
+      "Fresh",
+      " Lobsters From",
+      " Local",
+      " Waters"
+    ],
+    "subheadline": "Family-owned market proudly serving fresh New England lobster with quality, care, and tradition since 1979.",
+    "cta": {
+      "main": {
+        "show": true,
+        "type": "directions",
+        "text": "Order Now",
+        "link": {
+          "external": true,
+          "url": "https://google.com"
+        },
+        "alert": {
+          "type": "success",
+          "headline": "Success!",
+          "message": "Message sent."
+        }
+      },
+      "ghost": {
+        "show": true,
+        "type": "link",
+        "text": "Watch us on NH Chronicle",
+        "link": {
+          "external": true,
+          "url": "https://www.facebook.com/watch/?v=344401144512902"
+        },
+        "alert": {
+          "type": "call",
+          "headline": "Call (203) 917-5930",
+          "message": "to make a reservation."
+        }
+      }
+    }
+  },
+  "sections": [
+    "Gallery",
+    "About",
+    "Reviews",
+    "Products",
+    "Hours",
+    "Events",
+    "Contact"
+  ],
+  "about": {
+    "nav": true,
+    "content": "Northland Lobster Co is a family-owned lobster market in Conway, NH, known for offering the freshest catch around. While we focus on premium lobster, we also carry select seafood like haddock and crab cakes for our customers to enjoy. Every item we offer is chosen with care to ensure it meets our high standards for freshness and quality. For over 45 years, we’ve been a staple in the community, led by our beloved owner, John Landers. Visit us and see why locals keep coming back for lobster that’s served with care and tradition."
+  },
+  "gallery": {
+    "nav": true,
+    "categories": [
+      {
+        "name": "Community",
+        "dir": "community",
+        "items": [
+          "1.webp",
+          "2.webp",
+          "3.webp",
+          "4.webp",
+          "5.webp",
+          "6.webp",
+          "7.webp",
+          "8.webp",
+          "9.webp",
+          "10.webp",
+          "11.webp",
+          "12.webp",
+          "13.webp",
+          "14.webp",
+          "15.webp",
+          "16.webp",
+          "17.webp",
+          "18.webp",
+          "19.webp"
+        ]
+      },
+      {
+        "name": "Family",
+        "dir": "family",
+        "items": [
+          "1.webp",
+          "2.webp",
+          "3.webp",
+          "4.webp",
+          "5.webp",
+          "6.webp",
+          "7.webp",
+          "8.webp",
+          "9.webp"
+        ]
+      },
+      {
+        "name": "Lobster",
+        "dir": "lobster",
+        "items": [
+          "1.webp",
+          "2.webp",
+          "3.webp",
+          "4.webp",
+          "5.webp",
+          "6.webp",
+          "7.webp"
+        ]
+      },
+      {
+        "name": "Venue",
+        "dir": "venue",
+        "items": [
+          "1.webp",
+          "2.webp",
+          "3.webp",
+          "4.webp",
+          "5.webp",
+          "6.webp",
+          "7.webp",
+          "8.webp",
+          "9.webp"
+        ]
+      },
+      {
+        "name": "Videos",
+        "dir": "videos",
+        "items": [
+          "1.MOV",
+          "2.MOV",
+          "3.MOV",
+          "4.MOV",
+          "5.MOV"
+        ]
+      }
+    ]
+  },
+  "reviews": {
+    "nav": true,
+    "fromGoogle": true,
+    "list": [
+      {
+        "rating": 5,
+        "review": "These folks are wonderful to deal with personable and friendly. We have been going almost every weekend we are in the area. We have always enjoyed our purchases. Their Lobsters are so tasty and of good size. Thanks John and Shelly see you soon!",
+        "name": "Jessie Spears"
+      },
+      {
+        "rating": 5,
+        "review": "The owner is super friendly, knowledgeable about the seafood he sells and above all very great price and choicest product from the Maine shores to give his customers. I will absolutely buy again and again from his store as the products are tastiest I have tasted.",
+        "name": "Ed Ray"
+      },
+      {
+        "rating": 5,
+        "review": "Stopped into today for some steamers and had a lovely conversation with John. Educates you if your not sure on what to purchase, quality and proper cooking procedures. Honestly the best customer service woth best quality seafood. Highly highly recommended",
+        "name": "Crystal Berthiaume"
+      }
+    ]
+  },
+  "hours": {
+    "nav": true,
+    "list": [
+      {
+        "day": "Monday",
+        "openTime": "10:00am",
+        "closeTime": "5:00pm",
+        "closed": true,
+        "overnight": false
+      },
+      {
+        "day": "Tuesday",
+        "openTime": "10:00am",
+        "closeTime": "5:00pm",
+        "closed": true,
+        "overnight": false
+      },
+      {
+        "day": "Wednesday",
+        "openTime": "10:00am",
+        "closeTime": "5:00pm",
+        "closed": false,
+        "overnight": false
+      },
+      {
+        "day": "Thursday",
+        "openTime": "10:00am",
+        "closeTime": "5:00pm",
+        "closed": false,
+        "overnight": false
+      },
+      {
+        "day": "Friday",
+        "openTime": "10:00am",
+        "closeTime": "5:00pm",
+        "closed": false,
+        "overnight": false
+      },
+      {
+        "day": "Saturday",
+        "openTime": "10:00am",
+        "closeTime": "5:00pm",
+        "closed": false,
+        "overnight": false
+      },
+      {
+        "day": "Sunday",
+        "openTime": "10:00am",
+        "closeTime": "2:00pm",
+        "closed": false,
+        "overnight": false
+      }
+    ]
+  },
+  "contact": {
+    "nav": true,
+    "fields": [
+      {
+        "double": true,
+        "first": {
+          "label": "Name",
+          "type": "input"
+        },
+        "second": {
+          "label": "Email",
+          "type": "email"
+        }
+      },
+      {
+        "double": false,
+        "label": "Subject",
+        "type": "input"
+      },
+      {
+        "double": false,
+        "label": "Message",
+        "type": "textarea"
+      }
+    ]
+  },
+  "services": {
+    "nav": true,
+    "list": [
+      {
+        "img": "webdes",
+        "name": "Web Design",
+        "desc": "We build your website to maximize conversions using the latest technologies, ensuring a seamless experience across all devices."
+      },
+      {
+        "img": "webdev",
+        "name": "Web Development",
+        "desc": "We handle your domain registration and renewal, as well as DNS and SSL configuration and management."
+      },
+      {
+        "img": "webman",
+        "name": "Web Management",
+        "desc": "We configure and manage fast, reliable servers to host your website and minimize downtime."
+      }
+    ]
+  },
+  "products": {
+    "nav": true,
+    "alias": "Offerings",
+    "subheading": "Explore our tasty dishes crafted with passion",
+    "images": true,
+    "valueFormat": "",
+    "catalog": {
+      "show": false,
+      "alias": "Menu"
+    },
+    "categories": [
+      {
+        "name": "Main",
+        "dir": "main",
+        "subcategories": [
+          {
+            "name": "Seafood",
+            "dir": "seafood",
+            "desc": "",
+            "items": [
+              {
+                "img": "lobstermeat",
+                "name": "Lobster Meat",
+                "value": 1,
+                "desc": ""
+              },
+              {
+                "img": "haddock",
+                "name": "FAS Haddock",
+                "value": 2,
+                "desc": ""
+              },
+              {
+                "img": "steamers",
+                "name": "Steamers",
+                "value": 1,
+                "desc": ""
+              },
+              {
+                "img": "littleheads",
+                "name": "Littlenecks",
+                "value": 2,
+                "desc": ""
+              },
+              {
+                "img": "oysters",
+                "name": "Oysters",
+                "value": 1,
+                "desc": ""
+              },
+              {
+                "img": "shrimp",
+                "name": "Shrimp",
+                "value": 2,
+                "desc": ""
+              },
+              {
+                "img": "crabcakes",
+                "name": "Crab Cakes",
+                "value": 3,
+                "desc": ""
+              },
+              {
+                "img": "stuffedclam",
+                "name": "Stuffed Clams",
+                "value": 3,
+                "desc": ""
+              },
+              {
+                "img": "salmon",
+                "name": "Farm Fresh Salmon",
+                "value": 3,
+                "desc": ""
+              }
+            ]
+          },
+          {
+            "name": "Merchandise",
+            "dir": "merchandise",
+            "desc": "",
+            "items": [
+              {
+                "img": "hat",
+                "name": "",
+                "value": 20,
+                "desc": ""
+              },
+              {
+                "img": "tshirt",
+                "name": "",
+                "value": 25,
+                "desc": ""
+              },
+              {
+                "img": "racerback",
+                "name": "",
+                "value": 20,
+                "desc": ""
+              },
+              {
+                "img": "tools",
+                "name": "",
+                "value": 15,
+                "desc": ""
+              },
+              {
+                "img": "asdf",
+                "name": "",
+                "value": 15,
+                "desc": ""
+              },
+              {
+                "img": "beard",
+                "name": "",
+                "value": 15,
+                "desc": ""
+              },
+              {
+                "img": "v8",
+                "name": "",
+                "value": 15,
+                "desc": ""
+              },
+              {
+                "img": "v9",
+                "name": "",
+                "value": 15,
+                "desc": ""
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "events": {
+    "nav": true,
+    "list": [
+      {
+        "media": {
+          "type": "image",
+          "path": "thanksgiving"
+        },
+        "name": "Hours for Thanksgiving Week!",
+        "desc": "Wishing everyone a Happy Thanksgiving filled with warmth, gratitude, and joy!",
+        "duration": {
+          "type": "list",
+          "list": [
+            {
+              "date": "2025-11-24",
+              "time": "",
+              "closed": true
+            },
+            {
+              "date": "2025-11-25",
+              "time": "",
+              "closed": true
+            },
+            {
+              "date": "2025-11-26",
+              "time": "10:00am - 5:00pm"
+            },
+            {
+              "date": "2025-11-27",
+              "time": "",
+              "closed": true
+            },
+            {
+              "date": "2025-11-28",
+              "time": "10:00am - 5:00pm"
+            },
+            {
+              "date": "2025-11-29",
+              "time": "10:00am - 5:00pm"
+            },
+            {
+              "date": "2025-11-30",
+              "time": "10:00am - 2:00pm"
+            }
+          ],
+          "range": {
+            "start": "2026-04-01",
+            "end": "2026-04-07"
+          }
+        },
+        "announce": true
+      },
+      {
+        "media": "1.webp",
+        "name": "We're Open Until December 31!",
+        "desc": "",
+        "duration": {
+          "type": "list",
+          "list": [
+            {
+              "date": "2025-12-31",
+              "time": ""
+            }
+          ],
+          "range": {
+            "start": "2026-04-01",
+            "end": "2026-04-07"
+          }
+        },
+        "announce": true
+      }
+    ]
+  }
+}

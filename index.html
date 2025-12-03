@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Editor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <h1>Site Editor</h1>
+            <div class="file-controls">
+                <button id="clearBtn" class="btn btn-danger-outline">Clear All</button>
+                <button id="downloadBtn" class="btn btn-secondary">Download Files</button>
+                <label class="file-input-label primary">
+                    <span>Upload Files</span>
+                    <input type="file" id="imageInput" accept="image/webp,video/*,application/json" multiple>
+                </label>
+            </div>
+        </header>
+
+        <nav class="main-nav">
+            <button class="nav-tab active" data-section="media">Media</button>
+            <button class="nav-tab" data-section="reviews">Reviews</button>
+            <button class="nav-tab" data-section="colors">Color Palette</button>
+        </nav>
+
+        <main>
+            <!-- Media Section -->
+            <div id="media-section" class="content-section active">
+                <section class="tag-management">
+                    <div class="tag-controls-container">
+                        <div class="tag-form-header">
+                            <h3>Manage Tags</h3>
+                        </div>
+
+                        <div class="tag-creation-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Action Type</label>
+                                    <select id="tagTypeSelect">
+                                        <option value="category">Add Category</option>
+                                        <option value="subcategory">Add Subcategory</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Target Section</label>
+                                    <select id="tagSectionSelect">
+                                        <option value="Gallery">Gallery</option>
+                                        <option value="Products">Products</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-row" id="parentCategoryGroup" style="display: none;">
+                                <div class="form-group full-width">
+                                    <label>Parent Category</label>
+                                    <select id="tagParentCategorySelect">
+                                        <!-- Populated dynamically -->
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group flex-grow">
+                                    <label>Name</label>
+                                    <input type="text" id="newTagNameInput" placeholder="Enter name...">
+                                </div>
+                                <button id="addNewTagBtn" class="btn btn-primary">Add Tag</button>
+                            </div>
+                        </div>
+
+                        <div class="existing-tags-container">
+                            <div id="existingTagsList" class="existing-tags-list">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="gallery-section">
+                    <div id="imageGrid" class="image-grid">
+                        <!-- Images will be injected here -->
+                    </div>
+
+                </section>
+            </div>
+
+            <!-- Reviews Section -->
+            <div id="reviews-section" class="content-section" style="display: none;">
+                <div class="reviews-header">
+                    <h3>Reviews</h3>
+                    <button id="addReviewBtn" class="btn btn-primary">Add Review</button>
+                </div>
+                <div id="reviewsGrid" class="reviews-grid">
+                    <!-- Reviews will be injected here -->
+                </div>
+            </div>
+
+            <!-- Colors Section -->
+            <div id="colors-section" class="content-section" style="display: none;">
+                <div class="colors-grid" id="colorsGrid">
+                    <!-- Injected via JS -->
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
