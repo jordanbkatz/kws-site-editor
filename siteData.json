@@ -306,17 +306,17 @@
     "nav": true,
     "list": [
       {
-        "img": "webdes",
+        "media": "webdes",
         "name": "Web Design",
         "desc": "We build your website to maximize conversions using the latest technologies, ensuring a seamless experience across all devices."
       },
       {
-        "img": "webdev",
+        "media": "webdev",
         "name": "Web Development",
         "desc": "We handle your domain registration and renewal, as well as DNS and SSL configuration and management."
       },
       {
-        "img": "webman",
+        "media": "webman",
         "name": "Web Management",
         "desc": "We configure and manage fast, reliable servers to host your website and minimize downtime."
       }
@@ -343,55 +343,55 @@
             "desc": "",
             "items": [
               {
-                "img": "lobstermeat",
+                "media": "lobstermeat",
                 "name": "Lobster Meat",
                 "value": 1,
                 "desc": ""
               },
               {
-                "img": "haddock",
+                "media": "haddock",
                 "name": "FAS Haddock",
                 "value": 2,
                 "desc": ""
               },
               {
-                "img": "steamers",
+                "media": "steamers",
                 "name": "Steamers",
                 "value": 1,
                 "desc": ""
               },
               {
-                "img": "littleheads",
+                "media": "littleheads",
                 "name": "Littlenecks",
                 "value": 2,
                 "desc": ""
               },
               {
-                "img": "oysters",
+                "media": "oysters",
                 "name": "Oysters",
                 "value": 1,
                 "desc": ""
               },
               {
-                "img": "shrimp",
+                "media": "shrimp",
                 "name": "Shrimp",
                 "value": 2,
                 "desc": ""
               },
               {
-                "img": "crabcakes",
+                "media": "crabcakes",
                 "name": "Crab Cakes",
                 "value": 3,
                 "desc": ""
               },
               {
-                "img": "stuffedclam",
+                "media": "stuffedclam",
                 "name": "Stuffed Clams",
                 "value": 3,
                 "desc": ""
               },
               {
-                "img": "salmon",
+                "media": "salmon",
                 "name": "Farm Fresh Salmon",
                 "value": 3,
                 "desc": ""
@@ -404,49 +404,49 @@
             "desc": "",
             "items": [
               {
-                "img": "hat",
+                "media": "hat",
                 "name": "",
                 "value": 20,
                 "desc": ""
               },
               {
-                "img": "tshirt",
+                "media": "tshirt",
                 "name": "",
                 "value": 25,
                 "desc": ""
               },
               {
-                "img": "racerback",
+                "media": "racerback",
                 "name": "",
                 "value": 20,
                 "desc": ""
               },
               {
-                "img": "tools",
+                "media": "tools",
                 "name": "",
                 "value": 15,
                 "desc": ""
               },
               {
-                "img": "asdf",
+                "media": "asdf",
                 "name": "",
                 "value": 15,
                 "desc": ""
               },
               {
-                "img": "beard",
+                "media": "beard",
                 "name": "",
                 "value": 15,
                 "desc": ""
               },
               {
-                "img": "v8",
+                "media": "v8",
                 "name": "",
                 "value": 15,
                 "desc": ""
               },
               {
-                "img": "v9",
+                "media": "v9",
                 "name": "",
                 "value": 15,
                 "desc": ""
@@ -461,10 +461,7 @@
     "nav": true,
     "list": [
       {
-        "media": {
-          "type": "image",
-          "path": "thanksgiving"
-        },
+        "media": "thanksgiving.webp",
         "name": "Hours for Thanksgiving Week!",
         "desc": "Wishing everyone a Happy Thanksgiving filled with warmth, gratitude, and joy!",
         "duration": {

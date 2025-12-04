@@ -11,7 +11,7 @@ const state = {
         b1Mix: 95,
         b2Mix: 98,
         b1Mode: 'lighten', // 'lighten' or 'manual'
-        b2Mode: 'lighten'
+        b2Mode: 'manual'
     },
     tagHierarchy: {
         sections: {
@@ -39,7 +39,8 @@ const state = {
     siteData: null,
     deleteMode: false,
     activeDrag: null, // { id, startX, startY, initialX, initialY }
-    tagStartNumbers: {} // { tagName: number }
+    tagStartNumbers: {}, // { tagName: number }
+    reviewDeleteConfirmIndex: null
 };
 
 // DOM Elements
@@ -557,7 +558,12 @@ function renderReviews() {
                 <div class="review-controls">
                     <button class="review-btn" onclick="moveReview(${index}, -1)" title="Move Up" ${index === 0 ? 'disabled' : ''}>↑</button>
                     <button class="review-btn" onclick="moveReview(${index}, 1)" title="Move Down" ${index === state.reviews.length - 1 ? 'disabled' : ''}>↓</button>
-                    <button class="review-btn delete" onclick="deleteReview(${index})" title="Delete Review">✕</button>
+                    <button class="review-btn delete ${state.reviewDeleteConfirmIndex === index ? 'confirm-delete' : ''}" 
+                            onclick="deleteReview(${index})" 
+                            title="Delete Review"
+                            style="${state.reviewDeleteConfirmIndex === index ? 'background-color: #dc143c; color: white; width: auto; padding: 0 0.5rem;' : ''}">
+                        ${state.reviewDeleteConfirmIndex === index ? 'Confirm' : '✕'}
+                    </button>
                 </div>
             </div>
             
@@ -597,10 +603,20 @@ function handleAddReview() {
 }
 
 function deleteReview(index) {
-    if (confirm('Delete this review?')) {
+    // Save scroll position
+    const scrollPos = window.scrollY;
+
+    if (state.reviewDeleteConfirmIndex === index) {
         state.reviews.splice(index, 1);
+        state.reviewDeleteConfirmIndex = null;
+        renderReviews();
+    } else {
+        state.reviewDeleteConfirmIndex = index;
         renderReviews();
     }
+
+    // Restore scroll position
+    window.scrollTo(0, scrollPos);
 }
 
 function updateReview(index, field, value) {
@@ -617,10 +633,16 @@ function updateReview(index, field, value) {
 function moveReview(index, direction) {
     const newIndex = index + direction;
     if (newIndex >= 0 && newIndex < state.reviews.length) {
+        // Save scroll position
+        const scrollPos = window.scrollY;
+
         const temp = state.reviews[index];
         state.reviews[index] = state.reviews[newIndex];
         state.reviews[newIndex] = temp;
         renderReviews();
+
+        // Restore scroll position
+        window.scrollTo(0, scrollPos);
     }
 }
 
@@ -846,7 +868,7 @@ function generateSpecificInputs(img) {
                 <div class="checkbox-group">
                     <label>
                         <input type="checkbox" ${img.eventDetails.announce ? 'checked' : ''} onchange="updateEventDetails('${img.id}', 'announce', this.checked)">
-                        Announce on Home
+                        Announce
                     </label>
                 </div>
                 
@@ -948,7 +970,7 @@ async function downloadImages() {
                     return match ? parseInt(match[1]) : 0;
                 });
                 const maxIndex = indices.length > 0 ? Math.max(...indices) : 0;
-                counters[`Gallery - ${cat.name} `] = maxIndex;
+                counters[`Gallery-${cat.name}`] = maxIndex;
             });
         }
 
@@ -963,7 +985,7 @@ async function downloadImages() {
                             return isNaN(val) ? 0 : val;
                         });
                         const maxIndex = indices.length > 0 ? Math.max(...indices) : 0;
-                        counters[`Products - ${cat.name} -${sub.name} `] = maxIndex;
+                        counters[`Products-${cat.name}-${sub.name}`] = maxIndex;
                     });
                 }
             });
@@ -1032,7 +1054,7 @@ async function downloadImages() {
                         };
                         state.siteData.gallery.categories.push(cat);
                     }
-                    cat.items.push(`${newIndex}${ext} `);
+                    cat.items.push(`${newIndex}${ext}`);
                 }
                 else if (img.section === 'Products') {
                     let cat = state.siteData.products.categories.find(c => c.name === img.category);
@@ -1057,7 +1079,7 @@ async function downloadImages() {
                     }
 
                     sub.items.push({
-                        img: `${newIndex}${ext} `,
+                        media: `${newIndex}${ext}`,
                         name: img.productDetails.name,
                         value: parseFloat(img.productDetails.value) || 0,
                         desc: img.productDetails.description
@@ -1065,7 +1087,7 @@ async function downloadImages() {
                 }
                 else if (img.section === 'Events') {
                     state.siteData.events.list.push({
-                        media: `${newIndex}${ext} `,
+                        media: `${newIndex}${ext}`,
                         name: img.eventDetails.name,
                         desc: img.eventDetails.description,
                         announce: img.eventDetails.announce,
@@ -1294,6 +1316,34 @@ function mixWithWhite(hex, percentage) {
     return rgbToHex(r, g, b);
 }
 
+function normalizeColor(color) {
+    if (!color) return '#000000';
+    // Check for valid hex
+    if (/^#[0-9A-F]{6}$/i.test(color)) return color;
+
+    // Handle short hex #abc
+    if (/^#[0-9A-F]{3}$/i.test(color)) {
+        return '#' + color[1] + color[1] + color[2] + color[2] + color[3] + color[3];
+    }
+
+    // Handle named colors using a temporary element
+    // This is necessary because <input type="color"> ONLY accepts hex
+    const d = document.createElement('div');
+    d.style.color = color;
+    d.style.display = 'none';
+    document.body.appendChild(d);
+    const rgb = window.getComputedStyle(d).color;
+    document.body.removeChild(d);
+
+    // Parse rgb(r, g, b)
+    const match = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+    if (match) {
+        return rgbToHex(parseInt(match[1]), parseInt(match[2]), parseInt(match[3]));
+    }
+
+    return '#000000'; // Fallback
+}
+
 function renderColors() {
     // Load colors from siteData if available
     if (state.siteData && state.siteData.styles) {
@@ -1303,28 +1353,34 @@ function renderColors() {
         state.colors.b2 = state.siteData.styles.b2 || state.colors.b2;
     }
 
+    // Normalize all colors to Hex for inputs
+    state.colors.a1 = normalizeColor(state.colors.a1);
+    state.colors.a2 = normalizeColor(state.colors.a2);
+    state.colors.b1 = normalizeColor(state.colors.b1);
+    state.colors.b2 = normalizeColor(state.colors.b2);
+
     elements.colorsGrid.innerHTML = `
         <div class="color-card">
             <h4>Accent 1 (a1)</h4>
-            <div class="color-preview" style="background-color: ${state.colors.a1}"></div>
+            <div id="preview-a1" class="color-preview" style="background-color: ${state.colors.a1}"></div>
             <div class="color-input-group">
-                <input type="color" value="${state.colors.a1}" onchange="updateColor('a1', this.value)">
-                <input type="text" value="${state.colors.a1}" onchange="updateColor('a1', this.value)" placeholder="#000000">
+                <input id="input-color-a1" type="color" value="${state.colors.a1}" oninput="updateColor('a1', this.value)">
+                <input id="input-text-a1" type="text" value="${state.colors.a1}" onchange="updateColor('a1', this.value)" placeholder="#000000">
             </div>
         </div>
 
         <div class="color-card">
             <h4>Accent 2 (a2)</h4>
-            <div class="color-preview" style="background-color: ${state.colors.a2}"></div>
+            <div id="preview-a2" class="color-preview" style="background-color: ${state.colors.a2}"></div>
             <div class="color-input-group">
-                <input type="color" value="${state.colors.a2}" onchange="updateColor('a2', this.value)">
-                <input type="text" value="${state.colors.a2}" onchange="updateColor('a2', this.value)" placeholder="#000000">
+                <input id="input-color-a2" type="color" value="${state.colors.a2}" oninput="updateColor('a2', this.value)">
+                <input id="input-text-a2" type="text" value="${state.colors.a2}" onchange="updateColor('a2', this.value)" placeholder="#000000">
             </div>
         </div>
 
         <div class="color-card">
             <h4>Background 1 (b1)</h4>
-            <div class="color-preview" style="background-color: ${state.colors.b1}"></div>
+            <div id="preview-b1" class="color-preview" style="background-color: ${state.colors.b1}"></div>
             
             <div class="mode-toggle" style="margin-bottom: 1rem;">
                 <span>Lighten from a1</span>
@@ -1337,22 +1393,22 @@ function renderColors() {
             ${state.colors.b1Mode === 'lighten' ? `
                 <div class="slider-group">
                     <label>
-                        <span>Mix Amount</span>
-                        <span>${state.colors.b1Mix}%</span>
+                        <span>Lighten Amount</span>
+                        <span id="percent-b1">${state.colors.b1Mix}%</span>
                     </label>
                     <input type="range" min="0" max="100" value="${state.colors.b1Mix}" oninput="updateColorMix('b1', this.value)">
                 </div>
             ` : `
                 <div class="color-input-group">
-                    <input type="color" value="${state.colors.b1}" onchange="updateColor('b1', this.value)">
-                    <input type="text" value="${state.colors.b1}" onchange="updateColor('b1', this.value)" placeholder="#000000">
+                    <input id="input-color-b1" type="color" value="${state.colors.b1}" oninput="updateColor('b1', this.value)">
+                    <input id="input-text-b1" type="text" value="${state.colors.b1}" onchange="updateColor('b1', this.value)" placeholder="#000000">
                 </div>
             `}
         </div>
 
         <div class="color-card">
             <h4>Background 2 (b2)</h4>
-            <div class="color-preview" style="background-color: ${state.colors.b2}"></div>
+            <div id="preview-b2" class="color-preview" style="background-color: ${state.colors.b2}"></div>
             
             <div class="mode-toggle" style="margin-bottom: 1rem;">
                 <span>Lighten from a2</span>
@@ -1365,15 +1421,15 @@ function renderColors() {
             ${state.colors.b2Mode === 'lighten' ? `
                 <div class="slider-group">
                     <label>
-                        <span>Mix Amount</span>
-                        <span>${state.colors.b2Mix}%</span>
+                        <span>Lighten Amount</span>
+                        <span id="percent-b2">${state.colors.b2Mix}%</span>
                     </label>
                     <input type="range" min="0" max="100" value="${state.colors.b2Mix}" oninput="updateColorMix('b2', this.value)">
                 </div>
             ` : `
                 <div class="color-input-group">
-                    <input type="color" value="${state.colors.b2}" onchange="updateColor('b2', this.value)">
-                    <input type="text" value="${state.colors.b2}" onchange="updateColor('b2', this.value)" placeholder="#000000">
+                    <input id="input-color-b2" type="color" value="${state.colors.b2}" oninput="updateColor('b2', this.value)">
+                    <input id="input-text-b2" type="text" value="${state.colors.b2}" onchange="updateColor('b2', this.value)" placeholder="#000000">
                 </div>
             `}
         </div>
@@ -1382,15 +1438,17 @@ function renderColors() {
 
 function toggleColorMode(colorKey) {
     const currentMode = state.colors[`${colorKey}Mode`];
-    state.colors[`${colorKey}Mode`] = currentMode === 'lighten' ? 'manual' : 'lighten';
+    const newMode = currentMode === 'lighten' ? 'manual' : 'lighten';
+    state.colors[`${colorKey}Mode`] = newMode;
 
-    // If switching to lighten, update the color immediately
-    if (state.colors[`${colorKey}Mode`] === 'lighten') {
+    if (newMode === 'lighten') {
+        // Recalculate color based on current mix
         const mixValue = state.colors[`${colorKey}Mix`];
-        updateColorMix(colorKey, mixValue);
-    } else {
-        renderColors();
+        const sourceColor = colorKey === 'b1' ? state.colors.a1 : state.colors.a2;
+        state.colors[colorKey] = mixWithWhite(sourceColor, mixValue);
     }
+
+    renderColors();
 }
 
 function updateColor(colorKey, value) {
@@ -1398,28 +1456,54 @@ function updateColor(colorKey, value) {
     if (!/^#[0-9A-F]{6}$/i.test(value)) {
         // Try to fix common issues
         if (value.startsWith('#')) {
-            value = value.toUpperCase();
+            // Check length
+            if (value.length > 7) value = value.substring(0, 7);
         } else {
             value = '#' + value;
         }
     }
 
+    // Only update state if it looks like a valid hex (even if incomplete typing)
+    // But for color input, it sends valid hex. For text input, we might want to wait.
+    // Let's just update state and preview.
+
     state.colors[colorKey] = value;
-    renderColors();
+
+    // Update preview directly
+    const preview = document.getElementById(`preview-${colorKey}`);
+    if (preview) preview.style.backgroundColor = value;
+
+    // Sync inputs
+    const colorInput = document.getElementById(`input-color-${colorKey}`);
+    const textInput = document.getElementById(`input-text-${colorKey}`);
+
+    if (colorInput && colorInput.value !== value) colorInput.value = value;
+    if (textInput && textInput.value !== value) textInput.value = value;
+
+    // Update dependent colors if in lighten mode
+    if (colorKey === 'a1' && state.colors.b1Mode === 'lighten') {
+        updateColorMix('b1', state.colors.b1Mix);
+    } else if (colorKey === 'a2' && state.colors.b2Mode === 'lighten') {
+        updateColorMix('b2', state.colors.b2Mix);
+    }
 }
 
 function updateColorMix(colorKey, mixValue) {
     const mixPercent = parseInt(mixValue);
+    state.colors[`${colorKey}Mix`] = mixPercent;
 
-    if (colorKey === 'b1') {
-        state.colors.b1Mix = mixPercent;
-        state.colors.b1 = mixWithWhite(state.colors.a1, mixPercent);
-    } else if (colorKey === 'b2') {
-        state.colors.b2Mix = mixPercent;
-        state.colors.b2 = mixWithWhite(state.colors.a2, mixPercent);
-    }
+    const sourceColor = colorKey === 'b1' ? state.colors.a1 : state.colors.a2;
+    const newColor = mixWithWhite(sourceColor, mixPercent);
 
-    renderColors();
+    state.colors[colorKey] = newColor;
+
+    // Update preview directly
+    const preview = document.getElementById(`preview-${colorKey}`);
+    if (preview) preview.style.backgroundColor = newColor;
+
+    // Update percentage text directly
+    const percentText = document.getElementById(`percent-${colorKey}`);
+    if (percentText) percentText.textContent = `${mixPercent}%`;
 }
 
 // Initialize
