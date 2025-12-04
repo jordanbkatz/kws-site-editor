@@ -558,6 +558,10 @@ function renderReviews() {
                 <div class="review-controls">
                     <button class="review-btn" onclick="moveReview(${index}, -1)" title="Move Up" ${index === 0 ? 'disabled' : ''}>↑</button>
                     <button class="review-btn" onclick="moveReview(${index}, 1)" title="Move Down" ${index === state.reviews.length - 1 ? 'disabled' : ''}>↓</button>
+                    ${state.reviewDeleteConfirmIndex === index ?
+                `<button class="review-btn" onclick="cancelDeleteReview(${index})" title="Cancel Delete" style="width: auto; padding: 0 0.5rem; margin-right: 0.25rem;">Cancel</button>`
+                : ''
+            }
                     <button class="review-btn delete ${state.reviewDeleteConfirmIndex === index ? 'confirm-delete' : ''}" 
                             onclick="deleteReview(${index})" 
                             title="Delete Review"
@@ -614,6 +618,17 @@ function deleteReview(index) {
         state.reviewDeleteConfirmIndex = index;
         renderReviews();
     }
+
+    // Restore scroll position
+    window.scrollTo(0, scrollPos);
+}
+
+function cancelDeleteReview(index) {
+    // Save scroll position
+    const scrollPos = window.scrollY;
+
+    state.reviewDeleteConfirmIndex = null;
+    renderReviews();
 
     // Restore scroll position
     window.scrollTo(0, scrollPos);
