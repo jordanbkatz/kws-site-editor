@@ -29,6 +29,7 @@
             <button class="nav-tab active" data-section="media">Media</button>
             <button class="nav-tab" data-section="reviews">Reviews</button>
             <button class="nav-tab" data-section="colors">Color Palette</button>
+            <button class="nav-tab" data-section="highlights">Highlights</button>
         </nav>
 
         <main>
@@ -108,6 +109,31 @@
             <div id="colors-section" class="content-section" style="display: none;">
                 <div class="colors-grid" id="colorsGrid">
                     <!-- Injected via JS -->
+                </div>
+            </div>
+
+            <!-- Highlights Section -->
+            <div id="highlights-section" class="content-section" style="display: none;">
+                <div class="highlights-container">
+                    <!-- Logo Highlights -->
+                    <section class="highlight-group">
+                        <div class="highlight-header">
+                            <h3>Logo Text</h3>
+                        </div>
+                        <div id="logo-editor" class="editor-box">
+                            <!-- Injected JS -->
+                        </div>
+                    </section>
+
+                    <!-- Headline Highlights -->
+                    <section class="highlight-group">
+                        <div class="highlight-header">
+                            <h3>Headline Text</h3>
+                        </div>
+                        <div id="headline-list" class="headline-list">
+                            <!-- Injected JS -->
+                        </div>
+                    </section>
                 </div>
             </div>
         </main>

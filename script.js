@@ -19,6 +19,7 @@ const state = {
             'Hero': { type: 'singleton', allowCategories: false },
             'About': { type: 'singleton', allowCategories: false },
             'Events': { type: 'multi', allowCategories: false },
+            'Services': { type: 'multi', allowCategories: false },
             'Gallery': {
                 type: 'multi',
                 allowCategories: true,
@@ -35,7 +36,7 @@ const state = {
             }
         }
     },
-    images: [], // { id, url, file, section, category, subcategory, mode: 'auto'|'manual', scale: 1, x: 0, y: 0, productDetails: {}, eventDetails: {} }
+    images: [], // { id, url, file, section, category, subcategory, mode: 'auto'|'manual', scale: 1, x: 0, y: 0, productDetails: {}, eventDetails: {}, serviceDetails: {} }
     siteData: null,
     deleteMode: false,
     activeDrag: null, // { id, startX, startY, initialX, initialY }
@@ -55,13 +56,18 @@ const elements = {
     sections: {
         media: document.getElementById('media-section'),
         reviews: document.getElementById('reviews-section'),
-        colors: document.getElementById('colors-section')
+        colors: document.getElementById('colors-section'),
+        highlights: document.getElementById('highlights-section')
     },
     // Reviews
     reviewsGrid: document.getElementById('reviewsGrid'),
     addReviewBtn: document.getElementById('addReviewBtn'),
     // Colors
     colorsGrid: document.getElementById('colorsGrid'),
+    // Highlights
+    highlightsContainer: document.getElementById('highlights-section'),
+    logoEditor: document.getElementById('logo-editor'),
+    headlineList: document.getElementById('headline-list'),
     // Tag Management
     tagTypeSelect: document.getElementById('tagTypeSelect'),
     tagSectionSelect: document.getElementById('tagSectionSelect'),
@@ -134,6 +140,8 @@ function handleTabSwitch(sectionName) {
         renderReviews();
     } else if (sectionName === 'colors') {
         renderColors();
+    } else if (sectionName === 'highlights') {
+        renderHighlights();
     }
 }
 
@@ -147,6 +155,7 @@ function handleClearAll() {
                 'Hero': { type: 'singleton', allowCategories: false },
                 'About': { type: 'singleton', allowCategories: false },
                 'Events': { type: 'multi', allowCategories: false },
+                'Services': { type: 'multi', allowCategories: false },
                 'Gallery': {
                     type: 'multi',
                     allowCategories: true,
@@ -200,6 +209,18 @@ function handleImageUpload(event) {
                     state.reviews = [...state.siteData.reviews.list];
                     renderReviews();
                 }
+
+                // Initialize Colors
+                if (state.siteData.styles) {
+                    state.colors = { ...state.colors, ...state.siteData.styles };
+                }
+
+                // If on highlights tab, re-render to show new data immediately
+                if (state.activeSection === 'highlights') {
+                    renderHighlights();
+                } else if (state.activeSection === 'colors') {
+                    renderColors();
+                }
             } catch (err) {
                 console.error('Error parsing JSON:', err);
                 alert('Invalid JSON file');
@@ -233,6 +254,10 @@ function handleImageUpload(event) {
             durationType: 'list', // 'range' | 'list'
             range: { start: '', end: '' },
             dates: [] // { date: '', time: '', closed: false }
+        },
+        serviceDetails: {
+            name: '',
+            description: ''
         }
     }));
 
@@ -472,6 +497,9 @@ function updateImageTags(imageId, type, value) {
                 dates: []
             };
         }
+        if (newSection === 'Services' && !image.serviceDetails) {
+            image.serviceDetails = { name: '', description: '' };
+        }
 
     } else if (type === 'category') {
         image.category = value;
@@ -481,6 +509,13 @@ function updateImageTags(imageId, type, value) {
     }
 
     renderGrid();
+}
+
+function updateServiceDetails(id, field, value) {
+    const image = state.images.find(img => img.id === id);
+    if (image && image.serviceDetails) {
+        image.serviceDetails[field] = value;
+    }
 }
 
 function deleteImage(id) {
@@ -813,7 +848,18 @@ function generateTagSelectors(img) {
 }
 
 function generateSpecificInputs(img) {
-    if (img.section === 'Products') {
+    if (img.section === 'Services') {
+        return `
+            <div class="specific-inputs">
+                <div class="input-group">
+                    <input type="text" placeholder="Service Name" value="${img.serviceDetails.name}" onchange="updateServiceDetails('${img.id}', 'name', this.value)">
+                </div>
+                <div class="input-group">
+                    <textarea placeholder="Description" onchange="updateServiceDetails('${img.id}', 'description', this.value)">${img.serviceDetails.description}</textarea>
+                </div>
+            </div>
+        `;
+    } else if (img.section === 'Products') {
         return `
             <div class="specific-inputs">
                 <div class="input-group">
@@ -960,6 +1006,9 @@ async function downloadImages() {
         return;
     }
 
+    // 1. Initialize Counters from Site Data
+    ensureSiteData(); // Ensure Highlights structure exists
+
     // Sync Reviews to Site Data
     if (state.siteData) {
         if (!state.siteData.reviews) state.siteData.reviews = {};
@@ -1025,6 +1074,20 @@ async function downloadImages() {
             });
             const maxIndex = indices.length > 0 ? Math.max(...indices) : 0;
             counters['Events'] = maxIndex;
+        }
+
+        // Services Counters
+        if (state.siteData.services && state.siteData.services.list) {
+            const indices = state.siteData.services.list.map(svc => {
+                let val = 0;
+                if (svc.media) {
+                    const match = svc.media.match(/(\d+)\.(webp|mov|mp4|webm|m4v)$/i);
+                    val = match ? parseInt(match[1]) : 0;
+                }
+                return val;
+            });
+            const maxIndex = indices.length > 0 ? Math.max(...indices) : 0;
+            counters['Services'] = maxIndex;
         }
     }
 
@@ -1111,6 +1174,19 @@ async function downloadImages() {
                             range: img.eventDetails.range,
                             list: img.eventDetails.dates
                         }
+                    });
+                }
+                else if (img.section === 'Services') {
+                    if (!state.siteData.services) {
+                        state.siteData.services = { nav: true, list: [] };
+                    }
+                    if (!state.siteData.services.list) {
+                        state.siteData.services.list = [];
+                    }
+                    state.siteData.services.list.push({
+                        media: `${newIndex}${ext}`,
+                        name: img.serviceDetails.name,
+                        description: img.serviceDetails.description
                     });
                 }
             }
@@ -1521,7 +1597,172 @@ function updateColorMix(colorKey, mixValue) {
     if (percentText) percentText.textContent = `${mixPercent}%`;
 }
 
+// Highlights Logic
+function ensureSiteData() {
+    if (!state.siteData) {
+        state.siteData = {};
+    }
+    if (!state.siteData.logo) {
+        state.siteData.logo = { text: ["", ""] };
+    }
+    if (!state.siteData.hero) {
+        state.siteData.hero = { headline: [["New Headline"]] };
+    }
+
+    // Ensure logo text is array
+    if (!Array.isArray(state.siteData.logo.text)) {
+        state.siteData.logo.text = ["Site", "Logo"];
+    }
+
+    // Ensure hero headline is array of strings (segments)
+    if (!state.siteData.hero.headline) {
+        state.siteData.hero.headline = ["New Headline"];
+    } else if (Array.isArray(state.siteData.hero.headline)) {
+        // Migration: If it was array of arrays (options), take the first option
+        if (state.siteData.hero.headline.length > 0 && Array.isArray(state.siteData.hero.headline[0])) {
+            state.siteData.hero.headline = state.siteData.hero.headline[0];
+        }
+    } else {
+        // Fallback
+        state.siteData.hero.headline = ["New Headline"];
+    }
+}
+
+function renderHighlights() {
+    ensureSiteData();
+    renderLogoEditor();
+    renderHeadlineEditor();
+}
+
+/**
+ * Universal Segment Editor Renderer
+ * @param {HTMLElement} container - The container to render into
+ * @param {string[]} segments - The array of text segments
+ * @param {function(string[])} onUpdate - Callback with new segments array
+ */
+/**
+ * Universal Segment Editor Renderer
+ * @param {HTMLElement} container - The container to render into
+ * @param {string[]} segments - The array of text segments
+ * @param {function(string[])} onUpdate - Callback with new segments array
+ */
+function renderSegmentEditor(container, segments, onUpdate) {
+    container.innerHTML = '';
+    const segmentList = document.createElement('div');
+    segmentList.className = 'segment-list';
+
+    // Local mutable state to prevent closure staleness on typing
+    const currentSegments = [...segments];
+
+    // Helper to trigger update
+    const triggerUpdate = (newSegments) => {
+        onUpdate(newSegments);
+        renderSegmentEditor(container, newSegments, onUpdate);
+    };
+
+    if (segments.length === 0) {
+        // Should rarely happen given defaults, but handle it
+        const emptyBtn = document.createElement('button');
+        emptyBtn.className = 'add-segment-start-btn';
+        emptyBtn.textContent = '+ Add Initial Segment';
+        emptyBtn.onclick = () => triggerUpdate([""]);
+        segmentList.appendChild(emptyBtn);
+        container.appendChild(segmentList);
+        return;
+    }
+
+    segments.forEach((text, index) => {
+        const isHighlighted = index % 2 === 0;
+
+        const wrapper = document.createElement('div');
+        wrapper.className = `segment-wrapper ${isHighlighted ? 'highlight-wrapper' : 'normal-wrapper'}`;
+
+        // Input
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'segment-input';
+        input.value = text;
+        input.placeholder = isHighlighted ? 'Highlight' : 'Normal';
+
+        // Auto-width logic
+        const adjustWidth = () => {
+            input.style.width = '0px'; // Reset to minimal to get correct scrollWidth
+            const chWidth = (input.value.length || input.placeholder.length) + 2;
+            input.style.width = `max(50px, ${chWidth}ch)`;
+        };
+
+        // Initial adjustment
+        setTimeout(adjustWidth, 0);
+
+        input.oninput = (e) => {
+            adjustWidth();
+            currentSegments[index] = e.target.value; // Update local state for subsequent edits
+            onUpdate(currentSegments); // Save to global state
+        };
+
+        wrapper.appendChild(input);
+
+        // Delete Button
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'btn-icon-small delete-segment';
+        deleteBtn.innerHTML = '✕';
+        deleteBtn.title = 'Remove Segment';
+        deleteBtn.onclick = () => {
+            const newSegments = [...currentSegments];
+            newSegments.splice(index, 1);
+            triggerUpdate(newSegments);
+        };
+        wrapper.appendChild(deleteBtn);
+
+        segmentList.appendChild(wrapper);
+
+        // "Add After" Button (Gap)
+        const addBtn = document.createElement('button');
+        addBtn.className = 'add-segment-gap-btn';
+        addBtn.innerHTML = '+';
+        addBtn.title = 'Insert new segment';
+        addBtn.onclick = () => {
+            const newSegments = [...currentSegments];
+            newSegments.splice(index + 1, 0, "");
+            triggerUpdate(newSegments);
+        };
+        segmentList.appendChild(addBtn);
+    });
+
+    container.appendChild(segmentList);
+}
+
+
+// Logo Editor Integration
+function renderLogoEditor() {
+    const container = elements.logoEditor;
+    // We pass a copy, and on update we modify the real state
+    renderSegmentEditor(
+        container,
+        [...state.siteData.logo.text],
+        (newSegments) => {
+            state.siteData.logo.text = newSegments;
+        }
+    );
+}
+
+// Headline Editor Integration
+function renderHeadlineEditor() {
+    const listContainer = elements.headlineList;
+    listContainer.innerHTML = '';
+
+    // We pass a copy, and on update we modify the real state
+    renderSegmentEditor(
+        listContainer,
+        [...state.siteData.hero.headline],
+        (newSegments) => {
+            state.siteData.hero.headline = newSegments;
+        }
+    );
+}
+
+// remove unused functions
+function addNewHeadline() { }
+
 // Initialize
 init();
-
-

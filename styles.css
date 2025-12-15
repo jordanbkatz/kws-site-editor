@@ -991,3 +991,230 @@ input[type="checkbox"] {
     width: 100%;
     accent-color: var(--accent-color);
 }
+
+/* Highlights Section */
+.highlights-container {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.highlight-group {
+    background-color: var(--card-bg);
+    border-radius: var(--radius-md);
+    padding: 2rem;
+    border: 1px solid var(--border-color);
+}
+
+.highlight-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.highlight-header h3 {
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.section-desc {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    width: 100%;
+}
+
+/* Editor Container */
+.editor-box {
+    /* Removed padding/border as requested for logo, applying generally for cleaner look */
+    background-color: transparent;
+    padding: 0;
+    border: none;
+}
+
+/* Segment Editor */
+.segment-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0;
+    /* Gap handled by insertion buttons */
+}
+
+.segment-wrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 2px;
+    border-radius: var(--radius-sm);
+    margin-right: 2px;
+}
+
+.highlight-wrapper {
+    background-color: rgba(59, 130, 246, 0.15);
+    /* Subtle blue bg */
+    border: 1px dashed rgba(59, 130, 246, 0.4);
+}
+
+.normal-wrapper {
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 1px dashed var(--border-color);
+}
+
+.segment-input {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    /* Default neutral color for normal segments */
+    padding: 0.5rem 0.05rem;
+    /* Cut horizontal padding in half (0.25 -> 0.125) */
+    font-size: 1rem;
+    font-family: inherit;
+    min-width: 40px;
+    box-sizing: content-box;
+    text-align: center;
+}
+
+.highlight-wrapper .segment-input {
+    color: var(--accent-color);
+    /* Highlight color for highlighted segments */
+    font-weight: 600;
+}
+
+.segment-input:focus {
+    outline: none;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    color: var(--text-primary);
+    /* Reset to primary on focus for readability if needed, or keep colored */
+}
+
+
+/* Delete Button on Segment */
+.delete-segment {
+    opacity: 0;
+    font-size: 1rem;
+    /* Increased size */
+    padding: 0 6px;
+    color: var(--danger-color);
+    transition: opacity 0.2s;
+    cursor: pointer;
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+}
+
+.segment-wrapper:hover .delete-segment {
+    opacity: 1;
+}
+
+.delete-segment:hover {
+    background-color: rgba(239, 68, 68, 0.1);
+    border-radius: 50%;
+}
+
+/* Add Gap Button */
+.add-segment-gap-btn {
+    width: 24px;
+    /* Increased size (20 -> 24) */
+    height: 24px;
+    /* Increased size */
+    border-radius: 50%;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-bg);
+    color: var(--text-secondary);
+    font-size: 14px;
+    /* Increased font size */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin: 0 4px;
+    opacity: 0.3;
+}
+
+.add-segment-gap-btn:hover {
+    opacity: 1;
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+    transform: scale(1.1);
+}
+
+.add-segment-start-btn {
+    padding: 0.5rem 1rem;
+    border: 1px dashed var(--border-color);
+    background: transparent;
+    color: var(--text-secondary);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+}
+
+.add-segment-start-btn:hover {
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+
+.btn-icon-small:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    opacity: 1;
+}
+
+.btn-icon-small.delete:hover {
+    background-color: rgba(239, 68, 68, 0.2);
+    color: var(--danger-color);
+}
+
+.add-segment-btn {
+    padding: 0.5rem 1rem;
+    border: 1px dashed var(--border-color);
+    background: transparent;
+    color: var(--text-secondary);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.add-segment-btn:hover {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+    background-color: rgba(59, 130, 246, 0.1);
+}
+
+/* Headline List */
+.headline-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.headline-item {
+    background-color: var(--input-bg);
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.headline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.headline-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
